@@ -10,12 +10,13 @@ StudioEditableXBlockMixin to your XBlock.
 
 # Imports ###########################################################
 
+from datetime import datetime
 import json
 import logging
 
 from django.utils.translation import ugettext
 from xblock.core import XBlock
-from xblock.fields import Scope, JSONField, List, Integer, Float, Boolean, String
+from xblock.fields import Scope, JSONField, List, Integer, Float, Boolean, String, DateTime
 from xblock.exceptions import JsonHandlerError
 from xblock.fragment import Fragment
 from xblock.validation import Validation
@@ -104,6 +105,7 @@ class StudioEditableXBlockMixin(object):
             (Boolean, 'boolean'),
             (String, 'string'),
             (List, 'list'),
+            (DateTime, 'datetime'),
             (JSONField, 'generic'),  # This is last so as a last resort we display a text field w/ the JSON string
         )
         info = {
@@ -131,6 +133,8 @@ class StudioEditableXBlockMixin(object):
                 if type_class is List and field.runtime_options.get('list_style') == "set":
                     # List represents unordered, unique items, optionally drawn from list_values_provider()
                     info['type'] = 'set'
+                elif type_class is DateTime:
+                    info['type'] = "datetime"
                 elif type_class is List:
                     info['type'] = "generic"  # disable other types of list for now until properly implemented
                 break
@@ -139,6 +143,9 @@ class StudioEditableXBlockMixin(object):
         if info["type"] in ("list", "set"):
             info["value"] = [json.dumps(val) for val in info["value"]]
             info["default"] = json.dumps(info["default"])
+        elif info["type"] == "datetime":
+            info["value"] = datetime.strftime(info["value"], field.DATETIME_FORMAT) if info["value"] else ''
+            info["default"] = datetime.strftime(info["default"], field.DATETIME_FORMAT) if info["default"] else ''
         elif info["type"] == "generic":
             # Convert value to JSON string if we're treating this field generically:
             info["value"] = json.dumps(info["value"])
@@ -189,12 +196,15 @@ class StudioEditableXBlockMixin(object):
         """
         AJAX handler for studio_view() Save button
         """
+
         values = {}  # dict of new field values we are updating
         to_reset = []  # list of field names to delete from this XBlock
         for field_name in self.editable_fields:
             field = self.fields[field_name]
             if field_name in data['values']:
-                if isinstance(field, JSONField):
+                if isinstance(field, DateTime):
+                    values[field_name] = field.from_json(data['values'][field_name])
+                elif isinstance(field, JSONField):
                     values[field_name] = field.from_json(data['values'][field_name])
                 else:
                     raise JsonHandlerError(400, "Unsupported field type: {}".format(field_name))

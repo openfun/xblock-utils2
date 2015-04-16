@@ -56,7 +56,7 @@
               <textarea class="field-data-control" data-field-name="{{field.name}}" id="xb-field-edit-{{field.name}}" rows=10 cols=70>{{field.value}}</textarea>
             {% elif field.type == 'set' and field.has_list_values %}
               {% comment %}
-                TODO: If len(list_values) is high, show an alternate editor 
+                TODO: If len(list_values) is high, show an alternate editor
                 with a select box and a growing list of selected choices
               {% endcomment %}
               <div class="wrapper-list-settings">
@@ -78,6 +78,14 @@
                   {% endfor %}
                 </ul>
               </div>
+            {% elif field.type == 'datetime' %}
+              {# HTML5 datetime widget is not yet supported by browsers #}
+              <input
+                type="datetime"
+                class="field-data-control"
+                id="xb-field-edit-{{field.name}}"
+                value="{{field.value|default_if_none:""}}"
+              >
             {% elif field.type == 'generic' or field.type == 'list' or field.type == 'set' %}
               {# Show a textarea so we can edit it as a JSON string #}
               <textarea class="field-data-control" data-field-name="{{field.name}}" id="xb-field-edit-{{field.name}}" rows=5 cols=70>{{field.value}}</textarea>
