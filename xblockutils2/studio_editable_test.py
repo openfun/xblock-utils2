@@ -2,7 +2,7 @@
 Tests for StudioEditableXBlockMixin
 """
 from selenium.webdriver.support.ui import WebDriverWait
-from xblockutils.base_test import SeleniumXBlockTest
+from .base_test import SeleniumXBlockTest
 
 
 class StudioEditableBaseTest(SeleniumXBlockTest):

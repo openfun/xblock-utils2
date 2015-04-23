@@ -34,14 +34,14 @@ def package_data(pkg, root_list):
     return {pkg: data}
 
 setup(
-    name='xblock-utils',
-    version='0.1a0',
+    name='xblock-utils2',
+    version='0.2fun',
     description='Various utilities for XBlocks',
     packages=[
-        'xblockutils',
+        'xblockutils2',
     ],
     install_requires=[
         'XBlock',
     ],
-    package_data=package_data("xblockutils", ["public", "templates"]),
+    package_data=package_data("xblockutils2", ["public", "templates"]),
 )

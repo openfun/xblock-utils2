@@ -21,7 +21,7 @@ from xblock.exceptions import JsonHandlerError
 from xblock.fragment import Fragment
 from xblock.validation import Validation
 
-from xblockutils.resources import ResourceLoader
+from .resources import ResourceLoader
 
 # Globals ###########################################################
 
