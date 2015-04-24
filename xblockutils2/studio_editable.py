@@ -144,6 +144,13 @@ class StudioEditableXBlockMixin(object):
             info["value"] = [json.dumps(val) for val in info["value"]]
             info["default"] = json.dumps(info["default"])
         elif info["type"] == "datetime":
+            # split datetime in date and time widgets
+            timeformat = '%H:%M'
+            dateformat = '%Y-%m-%d'  # HTML5 date widget will localize date format
+            info["value_time"] = datetime.strftime(info["value"], timeformat) if info["value"] else ''
+            info["value_date"] = datetime.strftime(info["value"], dateformat) if info["value"] else ''
+            info["default_time"] = datetime.strftime(info["default"], timeformat) if info["default"] else ''
+            info["default_date"] = datetime.strftime(info["default"], dateformat) if info["default"] else ''
             info["value"] = datetime.strftime(info["value"], field.DATETIME_FORMAT) if info["value"] else ''
             info["default"] = datetime.strftime(info["default"], field.DATETIME_FORMAT) if info["default"] else ''
         elif info["type"] == "generic":
@@ -196,15 +203,19 @@ class StudioEditableXBlockMixin(object):
         """
         AJAX handler for studio_view() Save button
         """
-
         values = {}  # dict of new field values we are updating
         to_reset = []  # list of field names to delete from this XBlock
         for field_name in self.editable_fields:
             field = self.fields[field_name]
+            if isinstance(field, DateTime):
+                # rebuild datetime
+                dt = datetime.strptime(
+                        data['values'][field_name + '-date'] + ' ' + data['values'][field_name + '-time'],
+                        '%Y-%m-%d %H:%M')
+                values[field_name] = field.from_json(dt.isoformat())
+
             if field_name in data['values']:
-                if isinstance(field, DateTime):
-                    values[field_name] = field.from_json(data['values'][field_name])
-                elif isinstance(field, JSONField):
+                if isinstance(field, JSONField):
                     values[field_name] = field.from_json(data['values'][field_name])
                 else:
                     raise JsonHandlerError(400, "Unsupported field type: {}".format(field_name))

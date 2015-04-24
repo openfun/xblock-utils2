@@ -1,7 +1,6 @@
 /* Javascript for StudioEditableXBlockMixin. */
 function StudioEditableXBlockMixin(runtime, element) {
     "use strict";
-    
     var fields = [];
     var tinyMceAvailable = (typeof $.fn.tinymce !== 'undefined'); // Studio includes a copy of tinyMCE and its jQuery plugin
 
@@ -10,8 +9,16 @@ function StudioEditableXBlockMixin(runtime, element) {
         var $wrapper = $field.closest('li');
         var $resetButton = $wrapper.find('button.setting-clear');
         var type = $wrapper.data('cast');
+        var name = $wrapper.data('field-name');
+        if (type == 'datetime') {
+            if ($field.attr('type') == 'date') {
+                name = name + '-date';
+            } else {
+                name = name + '-time';
+            }
+        }
         fields.push({
-            name: $wrapper.data('field-name'),
+            name: name,
             isSet: function() { return $wrapper.hasClass('is-set'); },
             val: function() {
                 var val = $field.val();
