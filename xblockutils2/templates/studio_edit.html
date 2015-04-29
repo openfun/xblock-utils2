@@ -85,14 +85,14 @@
                 class="field-data-control"
                 id="xb-field-edit-{{field.name}}-date"
                 value="{{field.value_date|default_if_none:""}}"
-                style="width: 30%;"
+                style="width: 25%;"
               >
               <input
                 type="time"
                 class="field-data-control"
                 id="xb-field-edit-{{field.name}}-time"
                 value="{{field.value_time|default_if_none:""}}"
-                style="width: 30%;"
+                style="width: 15%;"
               >
             {% elif field.type == 'generic' or field.type == 'list' or field.type == 'set' %}
               {# Show a textarea so we can edit it as a JSON string #}
