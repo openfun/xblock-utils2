@@ -208,11 +208,14 @@ class StudioEditableXBlockMixin(object):
         for field_name in self.editable_fields:
             field = self.fields[field_name]
             if isinstance(field, DateTime):
-                # rebuild datetime
-                dt = datetime.strptime(
-                        data['values'][field_name + '-date'] + ' ' + data['values'][field_name + '-time'],
-                        '%Y-%m-%d %H:%M')
-                values[field_name] = field.from_json(dt.isoformat())
+                key_date = field_name + '-date'
+                key_time = field_name + '-time'
+                if set([key_date, key_time]).issubset(set(data['values'].keys())) and data['values'][key_date] and data['values'][key_time]:
+                    # rebuild datetime
+                    dt = datetime.strptime(
+                            data['values'][key_date] + ' ' + data['values'][key_time],
+                            '%Y-%m-%d %H:%M')
+                    values[field_name] = field.from_json(dt.isoformat())
 
             if field_name in data['values']:
                 if isinstance(field, JSONField):
