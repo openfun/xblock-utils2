@@ -7,12 +7,19 @@ test base classes and documentation shared by many XBlocks.
 
 .. _edx-solutions: https://github.com/edx-solutions
 
+.. image:: https://circleci.com/gh/openfun/xblock-utils2/tree/master.svg?style=svg
+    :target: https://circleci.com/gh/openfun/xblock-utils2/tree/master
+
+
+To install this package with ``pip`` use FUN package index::
+
+    pip install --extra-index-url https://pypi.fury.io/openfun xblock-utils2
 
 To test the utilities, run::
 
     python run_tests.py
 
-To get a coverage report, use:
+To get a coverage report, use::
 
     python run_tests.py --with-coverage --cover-package=xblockutils --cover-html
 
@@ -58,11 +65,11 @@ Supported field types:
 * Boolean:
   ``field_name = Boolean(display_name="Field Name")``
 * Float:
-  ``field_name = Float(display_name="Field Name")`` 
+  ``field_name = Float(display_name="Field Name")``
 * Integer:
-  ``field_name = Integer(display_name="Field Name")`` 
+  ``field_name = Integer(display_name="Field Name")``
 * String:
-  ``field_name = String(display_name="Field Name")`` 
+  ``field_name = String(display_name="Field Name")``
 * String (multiline):
   ``field_name = String(multiline_editor=True, resettable_editor=False)``
 * String (html):
@@ -90,7 +97,7 @@ Supported field options (all field types):
 * ``values`` can define a list of possible options, changing the UI element
   to a select box. Values can be set to any of the formats `defined in the
   XBlock source code <https://github.com/edx/XBlock/blob/master/xblock/fields.py>`__:
-  
+
   - A finite set of elements: ``[1, 2, 3]``
   - A finite set of elements where the display names differ from the values
     ::
@@ -123,8 +130,8 @@ This mixin helps to create XBlocks that allow content authors to add,
 remove, or reorder child blocks. By removing any existing
 ``author_view`` and adding this mixin, you'll get editable,
 re-orderable, and deletable child support in Studio. To enable authors to
-add arbitrary blocks as children, simply override ``author_edit_view`` 
-and set ``can_add=True`` when calling ``render_children`` - see the 
+add arbitrary blocks as children, simply override ``author_edit_view``
+and set ``can_add=True`` when calling ``render_children`` - see the
 source code. To restrict authors so they can add only specific types of
 child blocks or a limited number of children requires custom HTML.
 
