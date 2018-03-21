@@ -1,6 +1,8 @@
+*.egg-info
 *.log
 *.pyc
 .coverage
+build
+dist
 cover
-xblock_utils.egg-info
 tests.integration.*.png
